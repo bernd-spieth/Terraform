@@ -1,0 +1,65 @@
+# Public ip for VPN gateway
+resource "azurerm_public_ip" "pip-vpngw" {
+  name                = "pip-vpngw-${var.customerName}-${var.location}-001"
+  location            = azurerm_resource_group.resourcegroup.location
+  resource_group_name = azurerm_resource_group.resourcegroup.name
+
+  allocation_method = "Static"
+}
+
+# VPN gateway
+resource "azurerm_virtual_network_gateway" "vpn-gateway" {
+  name                = "vpng-${var.customerName}-${var.location}-001"
+  location            = azurerm_resource_group.resourcegroup.location
+  resource_group_name = azurerm_resource_group.resourcegroup.name
+
+  type     = "Vpn"
+  vpn_type = "PolicyBased"
+
+  active_active = false
+  enable_bgp    = false
+  sku           = "Basic"
+
+  ip_configuration {
+    name                          = "vnetGatewayConfig"
+    public_ip_address_id          = azurerm_public_ip.pip-vpngw.id
+    private_ip_address_allocation = "Dynamic"
+    subnet_id                     = azurerm_subnet.subnet-gateway.id
+  }
+
+  tags = merge(
+    local.commonTags,
+    {
+      Description = "The VPN gateway for the connection to the on premises network"
+    }
+  )
+}
+
+# Local network gateway
+
+# Contains information about the on premises environment with the name of the gateway to this
+# environment and the subnet so data can be routed
+resource "azurerm_local_network_gateway" "local-network-gateway" {
+  name                = "lgw-${var.customerName}-${var.location}-001"
+  resource_group_name = azurerm_resource_group.resourcegroup.name
+  location            = azurerm_resource_group.resourcegroup.location
+  gateway_fqdn        = "c9bgf5nobqyjdbpc.myfritz.net"
+  address_space       = ["192.168.35.0/24"]
+}
+
+# Connection object
+
+# To configure an IPSec Site-to-Site VPN we must provide the VPN Gateway with the local network gateway and
+# the connection object (with contains the shared key) so a connection between Azure and the on premises environment 
+# can be established  
+resource "azurerm_virtual_network_gateway_connection" "onpremise" {
+  name                = "con-azure-to-${var.customerName}-${var.location}-001"
+  location            = azurerm_resource_group.resourcegroup.location
+  resource_group_name = azurerm_resource_group.resourcegroup.name
+
+  type                       = "IPsec"
+  virtual_network_gateway_id = azurerm_virtual_network_gateway.vpn-gateway.id
+  local_network_gateway_id   = azurerm_local_network_gateway.local-network-gateway.id
+
+  shared_key = "4-v3ry-53cr37-1p53c-5h4r3d-k3y"
+}
