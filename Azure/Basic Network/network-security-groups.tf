@@ -25,6 +25,6 @@ resource "azurerm_network_security_group" "nsg-snet-dmz" {
 
 # The next section assigns the network security group to a subnet
 resource "azurerm_network_interface_security_group_association" "nsga-dmz" {
-  network_interface_id      = azurerm_network_interface.nic-firewall-subnet-dmz.id
+  network_interface_id      = azurerm_network_interface.nic-firewall-subnet-dmz-public.id
   network_security_group_id = azurerm_network_security_group.nsg-snet-dmz.id
 }

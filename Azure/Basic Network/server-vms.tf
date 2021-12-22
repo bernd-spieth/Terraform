@@ -8,9 +8,8 @@ resource "azurerm_windows_virtual_machine" "vm-firewall" {
   admin_username      = var.windowsAdmin
   admin_password      = var.windowsAdminPassword
   network_interface_ids = [
-    azurerm_network_interface.nic-firewall-subnet-dmz.id,
-    azurerm_network_interface.nic-firewall-subnet-vdi.id,
-    azurerm_network_interface.nic-firewall-subnet-ds.id
+    azurerm_network_interface.nic-firewall-subnet-dmz-public.id,
+    azurerm_network_interface.nic-firewall-subnet-dmz-private.id   
   ]
 
   os_disk {
@@ -30,7 +29,7 @@ resource "azurerm_windows_virtual_machine" "vm-firewall" {
   tags = merge(
     local.commonTags,
     {
-      Description = "The virtual machine used as test router / gateway between the different subnets"
+      Description = "The virtual machine used as firewall between the dmz subnets"
     }
   )
 }
