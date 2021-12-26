@@ -10,14 +10,14 @@ resource "azurerm_route_table" "rt-snet-gateway" {
 
   route {
     name                   = "To-VDI-Subnet"
-    address_prefix         = "172.16.2.0/24"
+    address_prefix         = "172.16.5.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "172.16.1.254"
   }
 
    route {
     name                   = "To-AD-DS-Subnet"
-    address_prefix         = "172.16.3.0/24"
+    address_prefix         = "172.16.6.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "172.16.1.254"
   }
@@ -52,7 +52,7 @@ resource "azurerm_route_table" "rt-snet-vdi" {
 
    route {
     name                   = "To-AD-DS-Subnet"
-    address_prefix         = "172.16.3.0/24"
+    address_prefix         = "172.16.6.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "172.16.2.254"
   }
@@ -82,14 +82,14 @@ resource "azurerm_route_table" "rt-snet-adds" {
     name                   = "To-Gateway-Subnet"
     address_prefix         = "172.16.0.0/24"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "172.16.3.254"
+    next_hop_in_ip_address = "172.16.2.254"
   }
 
   route {
     name                   = "To-VDI-Subnet"
-    address_prefix         = "172.16.2.0/24"
+    address_prefix         = "172.16.5.0/24"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "172.16.3.254"
+    next_hop_in_ip_address = "172.16.2.254"
   }
 
   tags = merge(
