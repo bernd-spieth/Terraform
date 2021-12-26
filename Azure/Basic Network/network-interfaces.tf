@@ -37,7 +37,7 @@ resource "azurerm_network_interface" "nic-firewall-subnet-dmz-private" {
   enable_ip_forwarding = true
 
   ip_configuration {
-    name                          = "S20-001-ip-nic-${var.customerName}-${var.location}-subnet-dmz-private"
+    name                          = "S20-001-ip-${var.customerName}-${var.location}-subnet-dmz-private"
     subnet_id                     = azurerm_subnet.subnet-dmz-private.id
     private_ip_address_allocation = "Static"
     private_ip_address            = "172.16.2.254"
@@ -58,9 +58,10 @@ resource "azurerm_network_interface" "nic-client-subnet-vdi" {
   resource_group_name = azurerm_resource_group.resourcegroup.name
 
   ip_configuration {
-    name                          = "ip-nic-vm-C20-001-${var.customerName}-${var.location}-subnet-vdi"
+    name                          = "C20-001-ip-${var.customerName}-${var.location}-subnet-vdi"
     subnet_id                     = azurerm_subnet.subnet-vdi.id
-    private_ip_address_allocation = "Dynamic"
+    private_ip_address_allocation = "Static"
+    private_ip_address            = "172.16.5.5"
   }
 
   tags = merge(
@@ -73,14 +74,15 @@ resource "azurerm_network_interface" "nic-client-subnet-vdi" {
 
 # Client interfaces for vm C20-002
 resource "azurerm_network_interface" "nic-client-subnet-adds" {
-  name                = "nic-vm-C20-002-${var.customerName}-${var.location}-subnet-vdi"
+  name                = "nic-vm-C20-002-${var.customerName}-${var.location}-subnet-adds"
   location            = azurerm_resource_group.resourcegroup.location
   resource_group_name = azurerm_resource_group.resourcegroup.name
 
   ip_configuration {
-    name                          = "ip-nic-vm-C20-002-${var.customerName}-${var.location}-subnet-vdi"
+    name                          = "C20-002-ip-${var.customerName}-${var.location}-subnet-adds"
     subnet_id                     = azurerm_subnet.subnet-adds.id
-    private_ip_address_allocation = "Dynamic"
+    private_ip_address_allocation = "Static"
+    private_ip_address            = "172.16.6.5"
   }
 
   tags = merge(
