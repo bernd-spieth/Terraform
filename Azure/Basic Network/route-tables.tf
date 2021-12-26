@@ -8,19 +8,19 @@ resource "azurerm_route_table" "rt-snet-gateway" {
   resource_group_name           = azurerm_resource_group.resourcegroup.name
   disable_bgp_route_propagation = true
 
-  route {
-    name                   = "To-VDI-Subnet"
-    address_prefix         = "172.16.5.0/24"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "172.16.1.254"
-  }
+  #route {
+  #  name                   = "To-VDI-Subnet"
+  #  address_prefix         = "172.16.5.0/24"
+  #  next_hop_type          = "VirtualAppliance"
+  #  next_hop_in_ip_address = "172.16.1.254"
+  #}
 
-   route {
-    name                   = "To-AD-DS-Subnet"
-    address_prefix         = "172.16.6.0/24"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "172.16.1.254"
-  }
+  # route {
+  #  name                   = "To-AD-DS-Subnet"
+  #  address_prefix         = "172.16.6.0/24"
+  #  next_hop_type          = "VirtualAppliance"
+  #  next_hop_in_ip_address = "172.16.1.254"
+  #}
 
   tags = merge(
     local.commonTags,
@@ -44,18 +44,25 @@ resource "azurerm_route_table" "rt-snet-vdi" {
   disable_bgp_route_propagation = true
 
   route {
-    name                   = "To-Gateway-Subnet"
-    address_prefix         = "172.16.0.0/24"
+    name                   = "Default-Route"
+    address_prefix         = "0.0.0.0/0"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "172.16.2.254"
   }
 
-   route {
-    name                   = "To-AD-DS-Subnet"
-    address_prefix         = "172.16.6.0/24"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "172.16.2.254"
-  }
+  #route {
+  #  name                   = "To-Gateway-Subnet"
+  #  address_prefix         = "172.16.0.0/24"
+  #  next_hop_type          = "VirtualAppliance"
+  #  next_hop_in_ip_address = "172.16.2.254"
+  #}
+
+  #route {
+  #  name                   = "To-AD-DS-Subnet"
+  #  address_prefix         = "172.16.6.0/24"
+  #  next_hop_type          = "VirtualAppliance"
+  #  next_hop_in_ip_address = "172.16.2.254"
+  #}
 
   tags = merge(
     local.commonTags,
@@ -79,18 +86,25 @@ resource "azurerm_route_table" "rt-snet-adds" {
   disable_bgp_route_propagation = true
 
   route {
-    name                   = "To-Gateway-Subnet"
-    address_prefix         = "172.16.0.0/24"
+    name                   = "Default-Route"
+    address_prefix         = "0.0.0.0/0"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "172.16.2.254"
   }
 
-  route {
-    name                   = "To-VDI-Subnet"
-    address_prefix         = "172.16.5.0/24"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "172.16.2.254"
-  }
+  #route {
+  #  name                   = "To-Gateway-Subnet"
+  #  address_prefix         = "172.16.0.0/24"
+  #  next_hop_type          = "VirtualAppliance"
+  #  next_hop_in_ip_address = "172.16.2.254"
+  #}
+
+  #route {
+  #  name                   = "To-VDI-Subnet"
+  #  address_prefix         = "172.16.5.0/24"
+  #  next_hop_type          = "VirtualAppliance"
+  #  next_hop_in_ip_address = "172.16.2.254"
+  #}
 
   tags = merge(
     local.commonTags,
